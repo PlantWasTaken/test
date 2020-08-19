@@ -1,0 +1,150 @@
+#include <iostream>
+#include <fstream>
+#include <stdlib.h> 
+#include <unistd.h> 
+#include <iomanip>
+#include <string>
+
+using namespace std;
+
+//function prototypes
+void Plant(void);
+void stats(int Stat_input);
+void logic(int flower_HP, int flower_WATER, int seconds, int minutes, int hours, int Watersupply);
+void ASCII(string ASCII_input);
+void Plant(void);
+void weather(int flower_HP, int flower_WATER, int Watersupply);
+void timer(int seconds, int minutes, int hours, int flower_HP, int flower_WATER, int Watersupply);
+int main(void);
+
+//global variables
+int Watersupply = 1000;
+
+//flower variables
+int flower_HP = 100;
+int flower_WATER = 100; 
+
+//inputs
+int Stat_input = 0;
+
+void Plant(int seconds, int minutes, int hours)
+{  
+	//clears the screen
+	system("cls");
+	
+	//ascii plant sign
+	ASCII("eco.txt");
+	cout << "STATS: \n";  
+	stats(2);
+	
+	//timer
+	//printing the timer
+	ASCII("Clock.txt");
+	cout << setfill(' ') << setw(34) << " --------------------------\n";
+	cout << setfill(' ') << setw(8) << "| " << setfill('0') << setw(2) << hours << " hrs | " << setfill('0') << setw(2) << minutes << " min | " << setfill('0') << setw(2) << seconds << " sec |" << endl;
+	cout << setfill(' ') << setw(37) << " --------------------------\n\n\n\n";
+	
+	//printing ascii flower
+	ASCII("flower.txt");  
+	//printing the stats for the flower
+	stats(1);
+        
+}
+
+void timer(int seconds, int minutes, int hours, int flower_HP, int flower_WATER)
+{
+	//logic for the timer
+    while (true) 
+	{
+		Plant(seconds, minutes, hours);
+        sleep(0.1); 
+        // increment seconds 
+        
+        seconds++;
+        // if seconds reaches 60 
+        if (seconds == 60) 
+		{
+            // increment minutes 
+            seconds = 0; 
+            minutes++;
+  
+            // if minutes reaches 60 
+            if (minutes == 60) 
+			{ 
+                // increment hours 
+                hours++; 
+                weather(flower_HP, flower_WATER, Watersupply);
+                minutes = 0; 
+            } 
+            
+            if(hours > 24 || seconds > 0)
+            {
+            	seconds = 0;
+            	minutes = 0;
+            	hours = 0;
+			}
+        } 
+    } 
+}
+
+void ASCII(string ASCII_input)
+{
+	fstream ASCII;
+	
+	//ascii plant sign	
+	ASCII.open(ASCII_input, ios::in); 
+	if (ASCII.is_open()) 
+	{  
+		string line;
+		while (getline(ASCII, line)) 
+		{ 
+			cout << line << "\n"; 
+		}
+		cout << "\n";
+		ASCII.close();
+	}		
+	
+}
+
+void stats(int Stat_input)
+{
+	//printing the values
+	switch(Stat_input)
+	{
+		case 1:
+			cout << "Hp: " << flower_HP << " / 100 \n";
+			cout << "Water: " << flower_WATER << " / 100\n";
+			break;
+			
+		case 2:
+			cout << "Water supply: " << Watersupply << " / 1000\n";
+			//cout << food supply here
+			break;
+	}
+}
+
+void weather(int flower_HP, int flower_WATER, int Watersupply)
+{
+	//weather logic here!
+}
+
+void logic(int flower_WATER, int flower_HP, int seconds, int minutes, int hours, int Watersupply)
+{
+	
+}
+
+int main(void)
+{
+	//variables
+	int hours = 0; 
+	int minutes = 0; 
+	int seconds = 0;
+	
+	//variables for function/switch cases
+	string ASCII_input;
+	//changing color to green
+	system("color 0a");
+	
+	//calling functins
+	timer(seconds, minutes, hours, flower_WATER, flower_HP);
+}
