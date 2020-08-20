@@ -8,13 +8,12 @@
 using namespace std;
 
 //function prototypes
-void Plant(void);
+void Plant(int seconds, int minutes, int hours, int days);
 void stats(int Stat_input);
-void logic(int flower_HP, int flower_WATER, int seconds, int minutes, int hours, int Watersupply);
+void logic(int flower_HP, int flower_WATER, int seconds, int minutes, int hours, int days, int Watersupply);
 void ASCII(string ASCII_input);
-void Plant(void);
 void weather(void);
-void timer(int seconds, int minutes, int hours, int flower_HP, int flower_WATER, int Watersupply);
+void timer(int seconds, int minutes, int hours, int days, int flower_HP, int flower_WATER, int Watersupply);
 int main(void);
 
 //global variables
@@ -27,11 +26,8 @@ int flower_WATER = 100;
 //inputs
 int Stat_input = 0;
 
-void Plant(int seconds, int minutes, int hours)
-{  
-	//weatcher
-	weather();
-	
+void Plant(int seconds, int minutes, int hours, int days)
+{  	
 	//clears the screen
 	system("cls");
 	
@@ -43,9 +39,12 @@ void Plant(int seconds, int minutes, int hours)
 	//timer
 	//printing the timer
 	ASCII("Clock.txt");
-	cout << setfill(' ') << setw(34) << " --------------------------\n";
-	cout << setfill(' ') << setw(8) << "| " << setfill('0') << setw(2) << hours << " hrs | " << setfill('0') << setw(2) << minutes << " min | " << setfill('0') << setw(2) << seconds << " sec |" << endl;
-	cout << setfill(' ') << setw(37) << " --------------------------\n\n\n\n";
+	cout << setfill(' ') << setw(34) << " ----------------------------------\n";
+	cout << setfill('0') << setw(2) << "| " << days << " day ";
+	cout << setfill(' ') << setw(2) << "| " << setfill('0') << setw(2) << hours << " hrs | "; 
+	cout << setfill('0') << setw(2) << minutes << " min | "; 
+	cout << setfill('0') << setw(2) << seconds << " sec |" << "\n"; 
+	cout << setfill(' ') << setw(37) << " ----------------------------------\n\n\n\n";
 	
 	//printing ascii flower
 	ASCII("flower.txt");  
@@ -54,12 +53,12 @@ void Plant(int seconds, int minutes, int hours)
         
 }
 
-void timer(int seconds, int minutes, int hours, int flower_HP, int flower_WATER)
+void timer(int seconds, int minutes, int hours, int days, int flower_HP, int flower_WATER)
 {
 	//logic for the timer
     while (true) 
 	{
-		Plant(seconds, minutes, hours);
+		Plant(seconds, minutes, hours, days);
         sleep(0.1); 
         // increment seconds 
         
@@ -70,22 +69,23 @@ void timer(int seconds, int minutes, int hours, int flower_HP, int flower_WATER)
             // increment minutes 
             seconds = 0; 
             minutes++;
-  
+  			weather();
+  			
             // if minutes reaches 60 
             if (minutes == 60) 
 			{ 
                 // increment hours 
                 hours++; 
-                //weather(flower_HP, flower_WATER, Watersupply);
-                minutes = 0; 
+                minutes = 0;
+				
+				if(hours == 24)
+				{
+					//incremts days
+					days++;
+					hours = 0;	
+				}
             } 
             
-            if(hours > 24 || seconds > 0)
-            {
-            	seconds = 0;
-            	minutes = 0;
-            	hours = 0;
-			}
         } 
     } 
 }
@@ -135,15 +135,18 @@ void weather(void)
 	switch(Weather)
 	{
 		case 1:
-			flower_WATER = flower_WATER + (1 + (rand() % 20));
-		
+			flower_WATER = flower_WATER + (1 + (rand() % 5, 10));
+			break;
+
 		case 2:
-			flower_WATER = flower_WATER - (rand() % 10);
+			
+			flower_WATER = flower_WATER - (rand() % 5, 10);
+			break;
 	}
 
 }
 
-void logic(int flower_WATER, int flower_HP, int seconds, int minutes, int hours, int Watersupply)
+void logic(int flower_WATER, int flower_HP, int seconds, int minutes, int hours, int days, int Watersupply)
 {
 	
 }
@@ -154,6 +157,7 @@ int main(void)
 	int hours = 0; 
 	int minutes = 0; 
 	int seconds = 0;
+	int days = 0;
 	
 	//variables for function/switch cases
 	string ASCII_input;
@@ -161,5 +165,5 @@ int main(void)
 	system("color 0a");
 	
 	//calling functins
-	timer(seconds, minutes, hours, flower_WATER, flower_HP);
+	timer(seconds, minutes, hours, days, flower_WATER, flower_HP);
 }
