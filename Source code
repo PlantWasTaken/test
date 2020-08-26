@@ -4,20 +4,22 @@
 #include <unistd.h> 
 #include <iomanip>
 #include <string>
+#include <vector>
 
 using namespace std;
 
 //function prototypes
 void Plant(int seconds, int minutes, int hours, int days);
 void stats(int Stat_input);
-void logic(int flower_HP, int flower_WATER, int seconds, int minutes, int hours, int days, int Watersupply);
+void logic(int MAGIK);
 void ASCII(string ASCII_input);
-void weather(void);
+void weather(int seconds, int minutes, int hours, int days, int MAGIK);
 void timer(int seconds, int minutes, int hours, int days, int flower_HP, int flower_WATER, int Watersupply);
 int main(void);
 
 //global variables
 int Watersupply = 1000;
+int MAGIK = 0;
 
 //flower variables
 int flower_HP = 100;
@@ -25,6 +27,12 @@ int flower_WATER = 100;
 
 //inputs
 int Stat_input = 0;
+
+//tracking hp, water etc etc
+vector<int> flower_water_vector;
+vector<int> flower_hp_vector;
+vector<int> watersupply_vector;
+
 
 void Plant(int seconds, int minutes, int hours, int days)
 {  	
@@ -63,13 +71,13 @@ void timer(int seconds, int minutes, int hours, int days, int flower_HP, int flo
         // increment seconds 
         
         seconds++;
+  		weather(seconds, minutes, hours, days, MAGIK);
         // if seconds reaches 60 
         if (seconds == 60) 
 		{
             // increment minutes 
             seconds = 0; 
             minutes++;
-  			weather();
   			
             // if minutes reaches 60 
             if (minutes == 60) 
@@ -85,7 +93,6 @@ void timer(int seconds, int minutes, int hours, int days, int flower_HP, int flo
 					hours = 0;	
 				}
             } 
-            
         } 
     } 
 }
@@ -116,7 +123,7 @@ void stats(int Stat_input)
 	{
 		case 1:
 			cout << "Hp: " << flower_HP << " / 100 \n";
-			cout << "Water: " << flower_WATER << " / 100\n";
+			cout << "Water: " <<  flower_WATER << " / 100\n";
 			break;
 			
 		case 2:
@@ -125,7 +132,7 @@ void stats(int Stat_input)
 	}
 }
 
-void weather(void)
+void weather(int seconds, int minutes, int hours, int days, int MAGIK)
 {
 	//weather logic here!
 	//1 = rain
@@ -135,19 +142,36 @@ void weather(void)
 	switch(Weather)
 	{
 		case 1:
-			flower_WATER = flower_WATER + (1 + (rand() % 5, 10));
+			flower_WATER = flower_WATER + (1 + (rand() % 5));
+			flower_water_vector.push_back(flower_WATER);
 			break;
 
 		case 2:
 			
-			flower_WATER = flower_WATER - (rand() % 5, 10);
+			flower_WATER = flower_WATER - (rand() % 5);
+			flower_water_vector.push_back(flower_WATER);
 			break;
 	}
+	logic(MAGIK);
 
 }
 
-void logic(int flower_WATER, int flower_HP, int seconds, int minutes, int hours, int days, int Watersupply)
+void logic(int MAGIK)
 {
+	switch(MAGIK)
+	{
+		case 0:
+			if(flower_WATER <= 0)
+			{
+				flower_HP = flower_HP - 10;
+				if(flower_HP <= 0)
+				{
+					system("msg * DEAD PLANT!");
+					exit(1);
+				}
+			}
+			break;
+	}
 	
 }
 
